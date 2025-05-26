@@ -13,7 +13,14 @@ export default function Log() {
   useEffect(() => {
     fetch('http://localhost:5000/api/workouts')
       .then((res) => res.json())
-      .then((data) => setWorkouts(data));
+      .then(data => {
+        const normalized = data.map(w => ({
+          ...w,
+          id: w._id || w.id, // normalize MongoDB _id to id
+        }));
+        setWorkouts(normalized);
+      });
+      
   }, []);
 
   const handleExerciseChange = (index, field, value) => {
@@ -28,22 +35,25 @@ export default function Log() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
     const updatedWorkout = { title, exercises, notes, date };
   
     try {
       let res;
   
       if (isEditing) {
+        // 🔁 PUT to update
         res = await fetch(`http://localhost:5000/api/workouts/${editingId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(updatedWorkout)
+          body: JSON.stringify(updatedWorkout),
         });
       } else {
+        // ➕ POST to create new
         res = await fetch('http://localhost:5000/api/workouts', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(updatedWorkout)
+          body: JSON.stringify(updatedWorkout),
         });
       }
   
@@ -51,15 +61,18 @@ export default function Log() {
   
       const data = await res.json();
   
+      // Normalize MongoDB _id to id for frontend consistency
+      const workoutWithId = { ...data, id: data._id };
+  
       if (isEditing) {
-        setWorkouts(workouts.map(w => (w.id === editingId ? data : w)));
+        setWorkouts(workouts.map(w => (w.id === editingId ? workoutWithId : w)));
         alert('Workout updated!');
       } else {
-        setWorkouts([data, ...workouts]);
+        setWorkouts([workoutWithId, ...workouts]);
         alert('Workout logged!');
       }
   
-      // Clear form
+      // Reset form state
       setTitle('');
       setNotes('');
       setDate('');
@@ -72,6 +85,7 @@ export default function Log() {
       alert('Something went wrong');
     }
   };
+  
   
 
   const handleDelete = async (id) => {

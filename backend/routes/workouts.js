@@ -25,25 +25,44 @@ router.get('/', async (req, res) => {
     }
 });
   
+// DELETE a workout
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params;
 
-router.delete('/:id', (req, res) => {
-    const { id } = req.params;
-    workouts = workouts.filter(w => w.id !== id);
-    res.json({ message: `Workout ${id} deleted.` });
-});
+  try {
+    const deleted = await Workout.findByIdAndDelete(id);
 
-router.put('/:id', (req, res) => {
-    const { id } = req.params;
-    const updatedWorkout = req.body;
-
-    const index = workouts.findIndex(w => w.id === id);
-    if (index !== -1) {
-        workouts[index] = { ...updatedWorkout, id }; // preserve ID
-        return res.json(workouts[index]);
+    if (!deleted) {
+      return res.status(404).json({ message: 'Workout not found' });
     }
 
-    res.status(404).json({ message: 'Workout not found' });
+    res.json({ message: `Workout ${id} deleted.` });
+  } catch (err) {
+    res.status(400).json({ message: 'Failed to delete workout' });
+  }
 });
+
+
+// UPDATE a workout
+router.put('/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const updatedWorkout = await Workout.findByIdAndUpdate(id, req.body, {
+      new: true,         // return updated document
+      runValidators: true,
+    });
+
+    if (!updatedWorkout) {
+      return res.status(404).json({ message: 'Workout not found' });
+    }
+
+    res.json(updatedWorkout);
+  } catch (err) {
+    res.status(400).json({ message: 'Failed to update workout' });
+  }
+});
+
   
 
 module.exports = router;
