@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 
 export default function Log() {
   const [title, setTitle] = useState('');
+  const [date, setDate] = useState('');
   const [exercises, setExercises] = useState([{ name: '', sets: '', reps: '', weight: '' }]);
   const [notes, setNotes] = useState('');
   const [workouts, setWorkouts] = useState([]); // for displaying all workouts
-
+  
   // Fetch existing workouts
   useEffect(() => {
     fetch('http://localhost:5000/api/workouts')
@@ -25,7 +26,7 @@ export default function Log() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newWorkout = { title, exercises, notes, date: new Date().toISOString() };
+    const newWorkout = { title, exercises, notes, date };
 
     try {
       const res = await fetch('http://localhost:5000/api/workouts', {
@@ -70,6 +71,13 @@ export default function Log() {
           placeholder="Workout Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+        /><br />
+
+        <input
+          type="datetime-local"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          required
         /><br />
 
         {exercises.map((ex, i) => (
@@ -120,7 +128,12 @@ export default function Log() {
       ) : (
         workouts.map((w) => (
           <div key={w.id} className="workout-card">
-            <h4>{w.title} — {new Date(w.date).toLocaleDateString()}</h4>
+            <h4>
+              {w.title} — {new Date(w.date).toLocaleString(undefined, {
+                dateStyle: 'medium',
+                timeStyle: 'short'
+              })}
+            </h4>
             <ul>
               {w.exercises.map((ex, i) => (
                 <li key={i}>
