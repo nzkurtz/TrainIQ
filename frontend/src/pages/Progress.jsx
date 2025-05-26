@@ -50,6 +50,47 @@ export default function Progress() {
     ],
   };
 
+  const [selectedExercise, setSelectedExercise] = useState('');
+
+  const allExercises = Array.from(
+    new Set(workouts.flatMap(w => w.exercises.map(ex => ex.name).filter(Boolean)))
+  );
+
+  const maxByDate = {};
+
+if (selectedExercise) {
+  workouts.forEach(w => {
+    const date = w.date.split('T')[0];
+
+    const maxForDay = w.exercises
+      .filter(ex => ex.name === selectedExercise)
+      .reduce((max, ex) => {
+        const weight = parseFloat(ex.weight) || 0;
+        return weight > max ? weight : max;
+      }, 0);
+
+    if (maxForDay > 0) {
+      maxByDate[date] = Math.max(maxByDate[date] || 0, maxForDay);
+    }
+  });
+}
+
+const sortedPRDates = Object.keys(maxByDate).sort();
+
+const prChartData = {
+    labels: sortedPRDates,
+    datasets: [
+      {
+        label: `${selectedExercise} – Max Weight`,
+        data: sortedPRDates.map(date => maxByDate[date]),
+        fill: false,
+        borderColor: '#ffa726',
+        tension: 0.3,
+      },
+    ],
+  };  
+
+  
   return (
     <div>
       <h2>Progress</h2>
@@ -59,6 +100,31 @@ export default function Progress() {
       ) : (
         <p>No workouts to show yet.</p>
       )}
+
+      <div style={{ marginTop: '3rem' }}>
+        <h3>Personal Records by Exercise</h3>
+        <label>Select an Exercise: </label>
+        <select
+          value={selectedExercise}
+          onChange={e => setSelectedExercise(e.target.value)}
+        >
+          <option value="">-- Choose Exercise --</option>
+          {allExercises.map((name, i) => (
+            <option key={i} value={name}>
+              {name}
+            </option>
+          ))}
+        </select>
+
+        {selectedExercise && sortedPRDates.length > 0 ? (
+          <Line data={prChartData} />
+        ) : selectedExercise ? (
+          <p>No records for this exercise yet.</p>
+        ) : null}
+      </div>
+
     </div>
+
+    
   );
 }

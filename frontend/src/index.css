@@ -219,6 +219,15 @@ canvas {
   margin-top: 1.5rem;
 }
 
+select {
+  background-color: #2a2a2a;
+  color: #eee;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #444;
+}
+
 @keyframes pulse {
   0% {
     transform: scale(1);
