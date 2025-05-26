@@ -94,37 +94,40 @@ const prChartData = {
   return (
     <div>
       <h2>Progress</h2>
-      <h3>Workout Volume Over Time</h3>
-      {sortedDates.length > 0 ? (
-        <Line data={chartData} />
-      ) : (
-        <p>No workouts to show yet.</p>
-      )}
+      <div className="chart-section">
+        <div className="chart-container">
+          <h3>Workout Volume Over Time</h3>
+          {sortedDates.length > 0 ? (
+            <Line data={chartData} />
+          ) : (
+            <p>No workouts to show yet.</p>
+          )}
+        </div>
 
-      <div style={{ marginTop: '3rem' }}>
-        <h3>Personal Records by Exercise</h3>
-        <label>Select an Exercise: </label>
-        <select
-          value={selectedExercise}
-          onChange={e => setSelectedExercise(e.target.value)}
-        >
-          <option value="">-- Choose Exercise --</option>
-          {allExercises.map((name, i) => (
-            <option key={i} value={name}>
-              {name}
-            </option>
-          ))}
-        </select>
+        <div className="chart-container">
+          <h3>Personal Records by Exercise</h3>
+          <label>Select an Exercise: </label>
+          <select
+            value={selectedExercise}
+            onChange={e => setSelectedExercise(e.target.value)}
+          >
+            <option value="">-- Choose Exercise --</option>
+            {allExercises.map((name, i) => (
+              <option key={i} value={name}>
+                {name}
+              </option>
+            ))}
+          </select>
 
-        {selectedExercise && sortedPRDates.length > 0 ? (
-          <Line data={prChartData} />
-        ) : selectedExercise ? (
-          <p>No records for this exercise yet.</p>
-        ) : null}
+          {selectedExercise && sortedPRDates.length > 0 ? (
+            <Line data={prChartData} />
+          ) : selectedExercise ? (
+            <p>No records for this exercise yet.</p>
+          ) : null}
+        </div>
       </div>
 
     </div>
 
-    
   );
 }
