@@ -8,7 +8,14 @@ export default function Dashboard() {
   useEffect(() => {
     fetch('http://localhost:5000/api/workouts')
       .then(res => res.json())
-      .then(data => setWorkouts(data));
+      .then(data => {
+        const normalized = data.map(w => ({
+          ...w,
+          id: w._id || w.id, // ensure we can rely on w.id
+        }));
+        setWorkouts(normalized);
+      });
+      
   }, []);
 
   const getWorkoutForDate = (dateStr) => {
@@ -69,16 +76,25 @@ export default function Dashboard() {
             key={i}
             className={`day-box ${workoutsByDay[i] ? 'active' : ''}`}
             onMouseEnter={() => {
-              if (!selectedWorkout) setHoveredWorkout(getWorkoutForDate(date));
+              const workout = getWorkoutForDate(date);
+              setHoveredWorkout(workout);
             }}
+            
             onMouseLeave={() => {
-              if (!selectedWorkout) setHoveredWorkout(null);
+              setHoveredWorkout(null); // always clear hover on leave
             }}
+            
+            
             onClick={() => {
               const workout = getWorkoutForDate(date);
-              setSelectedWorkout(selectedWorkout?.id === workout?.id ? null : workout);
-              setHoveredWorkout(null);
+              if (selectedWorkout?.id === workout?.id) {
+                setSelectedWorkout(null); // deselect if already selected
+              } else {
+                setSelectedWorkout(workout); // select this one
+              }
             }}
+            
+            
           >
             <div className="day-label">
               {['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][i]}
@@ -88,21 +104,22 @@ export default function Dashboard() {
       </div>
 
       {/* WORKOUT PREVIEW BELOW STRIP */}
-      {(selectedWorkout || hoveredWorkout) && (
+      {(hoveredWorkout || selectedWorkout) && (
         <div className="workout-preview">
-          <h4>{(selectedWorkout || hoveredWorkout).title}</h4>
+          <h4>{(hoveredWorkout || selectedWorkout).title}</h4>
           <ul>
-            {(selectedWorkout || hoveredWorkout).exercises.map((ex, i) => (
+            {(hoveredWorkout || selectedWorkout).exercises.map((ex, i) => (
               <li key={i}>
                 {ex.name || 'Exercise'}: {ex.sets || '?'}x{ex.reps || '?'} @ {ex.weight || '?'} lbs
               </li>
             ))}
           </ul>
-          {(selectedWorkout || hoveredWorkout).notes && (
-            <p><i>Notes:</i> {(selectedWorkout || hoveredWorkout).notes}</p>
+          {(hoveredWorkout || selectedWorkout).notes && (
+            <p><i>Notes:</i> {(hoveredWorkout || selectedWorkout).notes}</p>
           )}
         </div>
       )}
+
     </div>
   );
 }
