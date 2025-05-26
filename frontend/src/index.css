@@ -145,6 +145,53 @@ nav {
   background-color: #ff2f2f;
 }
 
+.week-strip {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+}
+
+.day-box {
+  width: 100px;
+  height: 60px;
+  background-color: #2a2a2a;
+  border-radius: 6px;
+  color: #888;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.2s;
+  text-align: center;
+}
+
+.day-box.active {
+  background-color: #00c897;
+  color: #111;
+}
+
+.workout-preview {
+  margin-top: 2rem;
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  max-width: 600px;
+  box-shadow: 0 0 10px rgba(0, 200, 151, 0.25);
+}
+
+.workout-preview h4 {
+  color: #00c897;
+  margin-bottom: 0.5rem;
+}
+
+.workout-preview ul {
+  list-style-type: disc;
+  margin-left: 1.2rem;
+  margin-bottom: 0.5rem;
+}
 
 @keyframes pulse {
   0% {
