@@ -1,9 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function Log() {
   const [title, setTitle] = useState('');
   const [exercises, setExercises] = useState([{ name: '', sets: '', reps: '', weight: '' }]);
   const [notes, setNotes] = useState('');
+  const [workouts, setWorkouts] = useState([]); // for displaying all workouts
+
+  // Fetch existing workouts
+  useEffect(() => {
+    fetch('http://localhost:5000/api/workouts')
+      .then((res) => res.json())
+      .then((data) => setWorkouts(data));
+  }, []);
 
   const handleExerciseChange = (index, field, value) => {
     const updated = [...exercises];
@@ -19,18 +27,23 @@ export default function Log() {
     e.preventDefault();
     const newWorkout = { title, exercises, notes, date: new Date().toISOString() };
 
-    const res = await fetch('http://localhost:5000/api/workouts', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newWorkout)
-    });
+    try {
+      const res = await fetch('http://localhost:5000/api/workouts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newWorkout)
+      });
 
-    if (res.ok) {
+      if (!res.ok) throw new Error('Failed to log workout');
+
+      const saved = await res.json();
       alert('Workout logged!');
+      setWorkouts([saved, ...workouts]); // add new workout to top
       setTitle('');
       setNotes('');
       setExercises([{ name: '', sets: '', reps: '', weight: '' }]);
-    } else {
+    } catch (err) {
+      console.error(err);
       alert('Failed to log workout');
     }
   };
@@ -85,6 +98,27 @@ export default function Log() {
 
         <button type="submit">Log Workout</button>
       </form>
+
+      <hr />
+
+      <h3>Logged Workouts</h3>
+      {workouts.length === 0 ? (
+        <p>No workouts yet.</p>
+      ) : (
+        workouts.map((w) => (
+          <div key={w.id} style={{ marginBottom: '1.5rem' }}>
+            <h4>{w.title} — {new Date(w.date).toLocaleDateString()}</h4>
+            <ul>
+              {w.exercises.map((ex, i) => (
+                <li key={i}>
+                  {ex.name}: {ex.sets}x{ex.reps} reps @ {ex.weight} lbs
+                </li>
+              ))}
+            </ul>
+            {w.notes && <p><i>Notes:</i> {w.notes}</p>}
+          </div>
+        ))
+      )}
     </div>
   );
 }
