@@ -119,7 +119,7 @@ export default function Log() {
         <p>No workouts yet.</p>
       ) : (
         workouts.map((w) => (
-          <div key={w.id} style={{ marginBottom: '1.5rem' }}>
+          <div key={w.id} className="workout-card">
             <h4>{w.title} — {new Date(w.date).toLocaleDateString()}</h4>
             <ul>
               {w.exercises.map((ex, i) => (
