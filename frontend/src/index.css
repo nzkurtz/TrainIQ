@@ -7,20 +7,39 @@ body {
   color: #eee;
 }
 
-nav {
-  background-color: #1e1e1e;
-  padding: 1rem;
+body {
+  font-family: 'Montserrat', sans-serif;
 }
+
+nav {
+  background: linear-gradient(to right, #2c2c2c, #101010, #2c2c2c); /* subtle gradient */
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+}
+
 
 nav a {
   color: #00c897;
   text-decoration: none;
-  margin-right: 1rem;
+  margin-right: 1.5rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+  transition: color 0.2s ease;
+  text-shadow:
+    -1px -1px 0 #000,
+     1px -1px 0 #000,
+    -1px  1px 0 #000,
+     1px  1px 0 #000;
 }
 
+
 nav a:hover {
-  text-decoration: underline;
+  color: #0fffc1;
+  text-shadow: 0 0 4px #0fffc1;
 }
+
 
 .container {
   padding: 1.5rem;
