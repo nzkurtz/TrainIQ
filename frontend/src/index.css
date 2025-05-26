@@ -214,6 +214,11 @@ nav {
   color: #ccc;
 }
 
+canvas {
+  max-width: 700px;
+  margin-top: 1.5rem;
+}
+
 @keyframes pulse {
   0% {
     transform: scale(1);
