@@ -6,7 +6,9 @@ export default function Log() {
   const [exercises, setExercises] = useState([{ name: '', sets: '', reps: '', weight: '' }]);
   const [notes, setNotes] = useState('');
   const [workouts, setWorkouts] = useState([]); // for displaying all workouts
-  
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+
   // Fetch existing workouts
   useEffect(() => {
     fetch('http://localhost:5000/api/workouts')
@@ -26,28 +28,51 @@ export default function Log() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newWorkout = { title, exercises, notes, date };
-
+    const updatedWorkout = { title, exercises, notes, date };
+  
     try {
-      const res = await fetch('http://localhost:5000/api/workouts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newWorkout)
-      });
-
-      if (!res.ok) throw new Error('Failed to log workout');
-
-      const saved = await res.json();
-      alert('Workout logged!');
-      setWorkouts([saved, ...workouts]); // add new workout to top
+      let res;
+  
+      if (isEditing) {
+        res = await fetch(`http://localhost:5000/api/workouts/${editingId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updatedWorkout)
+        });
+      } else {
+        res = await fetch('http://localhost:5000/api/workouts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updatedWorkout)
+        });
+      }
+  
+      if (!res.ok) throw new Error('Failed to submit workout');
+  
+      const data = await res.json();
+  
+      if (isEditing) {
+        setWorkouts(workouts.map(w => (w.id === editingId ? data : w)));
+        alert('Workout updated!');
+      } else {
+        setWorkouts([data, ...workouts]);
+        alert('Workout logged!');
+      }
+  
+      // Clear form
       setTitle('');
       setNotes('');
+      setDate('');
       setExercises([{ name: '', sets: '', reps: '', weight: '' }]);
+      setIsEditing(false);
+      setEditingId(null);
+  
     } catch (err) {
       console.error(err);
-      alert('Failed to log workout');
+      alert('Something went wrong');
     }
   };
+  
 
   const handleDelete = async (id) => {
     const res = await fetch(`http://localhost:5000/api/workouts/${id}`, {
@@ -61,7 +86,15 @@ export default function Log() {
     }
   };
 
-
+  const startEdit = (workout) => {
+    setTitle(workout.title);
+    setNotes(workout.notes);
+    setDate(workout.date);
+    setExercises(workout.exercises);
+    setIsEditing(true);
+    setEditingId(workout.id);
+  };
+  
   return (
     <div>
       <h2>Log a Workout</h2>
@@ -117,7 +150,7 @@ export default function Log() {
           onChange={(e) => setNotes(e.target.value)}
         /><br />
 
-        <button type="submit">Log Workout</button>
+        <button type="submit">{isEditing ? 'Update Workout' : 'Log Workout'}</button>
       </form>
 
       <hr />
@@ -142,6 +175,7 @@ export default function Log() {
               ))}
             </ul>
             {w.notes && <p><i>Notes:</i> {w.notes}</p>}
+            <button onClick={() => startEdit(w)}>Edit</button>
             <button onClick={() => handleDelete(w.id)}>Delete</button>
           </div>
         ))
