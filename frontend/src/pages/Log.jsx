@@ -48,10 +48,23 @@ export default function Log() {
     }
   };
 
+  const handleDelete = async (id) => {
+    const res = await fetch(`http://localhost:5000/api/workouts/${id}`, {
+      method: 'DELETE'
+    });
+
+    if (res.ok) {
+      setWorkouts(workouts.filter(w => w.id !== id));
+    } else {
+      alert('Failed to delete workout.');
+    }
+  };
+
+
   return (
     <div>
       <h2>Log a Workout</h2>
-      <form onSubmit={handleSubmit}>
+      <form className="workout-form" onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Workout Title"
@@ -116,6 +129,7 @@ export default function Log() {
               ))}
             </ul>
             {w.notes && <p><i>Notes:</i> {w.notes}</p>}
+            <button onClick={() => handleDelete(w.id)}>Delete</button>
           </div>
         ))
       )}
