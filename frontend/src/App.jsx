@@ -8,10 +8,18 @@ function App() {
   return (
     <Router>
       <nav>
-        <Link to="/dashboard">Dashboard</Link>
-        <Link to="/log">Log</Link>
-        <Link to="/progress">Progress</Link>
+        <div className="nav-container">
+          <div className="nav-left">
+            <Link to="/dashboard">Dashboard</Link>
+            <Link to="/log">Log</Link>
+            <Link to="/progress">Progress</Link>
+          </div>
+          <div className="nav-right">
+            TrainIQ
+          </div>
+        </div>
       </nav>
+
 
       <div className="container">
         <Routes>
@@ -20,7 +28,13 @@ function App() {
           <Route path="/progress" element={<Progress />} />
         </Routes>
       </div>
+
+      
+
     </Router>
+
+
+
   );
 }
 
