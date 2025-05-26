@@ -54,6 +54,12 @@ export default function Dashboard() {
   return (
     <div>
       <h2>Dashboard</h2>
+      <div className="weekly-summary">
+        <h3>This Week</h3>
+        <p>✔️ <strong>{totalWorkouts}</strong> workouts</p>
+        <p>📋 <strong>{totalExercises}</strong> total exercises</p>
+        <p>🏋️ <strong>{totalVolume}</strong> lbs lifted</p>
+      </div>
       <h3>Workout Activity This Week</h3>
 
       {/* WEEK STRIP */}

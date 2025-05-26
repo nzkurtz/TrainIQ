@@ -193,6 +193,27 @@ nav {
   margin-bottom: 0.5rem;
 }
 
+.weekly-summary {
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  margin: 1rem 0;
+  max-width: 500px;
+  box-shadow: 0 0 8px rgba(0, 200, 151, 0.15);
+}
+
+.weekly-summary h3 {
+  color: #00c897;
+  margin-bottom: 0.5rem;
+}
+
+.weekly-summary p {
+  margin: 0.2rem 0;
+  font-size: 1rem;
+  color: #ccc;
+}
+
 @keyframes pulse {
   0% {
     transform: scale(1);
