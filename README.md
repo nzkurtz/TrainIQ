@@ -1,6 +1,6 @@
 # TrainIQ — Full Stack Workout Tracker
 
-**TrainIQ** is a full-stack workout planning and progress tracking app built with React, Node.js, Express, and MongoDB. It allows users to log workouts, visualize progress over time, and streamline recurring workouts using preset copying — all in a clean, interactive UI.
+**TrainIQ** is a full-stack workout planning and progress tracking app built with React, Node.js, Express, and MongoDB. It allows users to log workouts, visualize progress over time, and streamline recurring workouts using preset copying in a clean, interactive UI.
 
 ---
 
@@ -22,30 +22,6 @@
 | Frontend     | Backend         | Database       | Tools         |
 |--------------|------------------|----------------|---------------|
 | React (Vite) | Node.js, Express | MongoDB, Mongoose | Git, GitHub, Chart.js |
-
----
-
-## Screenshots
-
-> _(Add screenshots or GIFs here showing the dashboard, log form, and charts)_
-
----
-
-## Folder Structure
-
-```bash
-TrainIQ/
-├── backend/
-│   ├── models/
-│   ├── routes/
-│   └── server.js
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   └── App.jsx
-│   └── index.html
-```
 
 ---
 
