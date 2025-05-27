@@ -92,9 +92,6 @@ App runs at [http://localhost:5173](http://localhost:5173)
 ## Author
 
 **Nathan Kurtz**  
-[nathanzkurtz@gmail.com](mailto:nathanzkurtz@gmail.com)  
-[LinkedIn](https://linkedin.com/in/nathan-kurtz-58264a292)  
-[GitHub](https://github.com/nzkurtz)
 
 ---
 
@@ -102,7 +99,6 @@ App runs at [http://localhost:5173](http://localhost:5173)
 
 - User authentication (login/signup)
 - Saveable workout templates
-- Mobile responsiveness (PWA)
 - Cloud deployment (MongoDB Atlas + Render/Netlify)
 
 ---
