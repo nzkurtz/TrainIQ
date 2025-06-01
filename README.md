@@ -25,45 +25,6 @@
 
 ---
 
-## Getting Started (Local)
-
-### 1. Clone the repo
-
-```bash
-git clone https://github.com/nzkurtz/TrainIQ.git
-cd TrainIQ
-```
-
-### 2. Set up the backend
-
-```bash
-cd backend
-npm install
-touch .env
-```
-
-Add your MongoDB URI to `.env`:
-```
-MONGO_URI=mongodb://127.0.0.1:27017/trainiq
-```
-
-Then run:
-```bash
-mongod  # in a separate terminal
-node server.js
-```
-
-### 3. Set up the frontend
-
-```bash
-cd ../frontend
-npm install
-npm run dev
-```
-
-App runs at [http://localhost:5173](http://localhost:5173)
-
----
 
 ## Author
 
