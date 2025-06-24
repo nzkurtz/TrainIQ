@@ -97,7 +97,7 @@ export default function Dashboard() {
             
           >
             <div className="day-label">
-              {['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'][i]}
+              {['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][i]}
             </div>
           </div>
         ))}
